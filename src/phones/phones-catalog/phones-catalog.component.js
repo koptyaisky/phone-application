@@ -1,8 +1,9 @@
+import {BaseComponent} from "../../shared/components/base/base.component.js";
 
 
-export class PhonesCatalogComponent {
+export class PhonesCatalogComponent extends BaseComponent{
     constructor({element, phones, onPhoneSelected}) {
-        this._element = element;
+        super({element});
         this._phones = phones;
         this._onPhoneSelected = onPhoneSelected;
         this._render();
