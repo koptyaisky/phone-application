@@ -5,12 +5,15 @@ export class PhonesDetailsComponent extends BaseComponent {
     constructor({element, onBackToCatalog}) {
         super({element});
         this._onBackToCatalog = onBackToCatalog;
-        this._element.addEventListener("click", (event) => {
-            let el = event.target.closest('.back-btn');
-            if(!el) {
-                return;
+        this._element.addEventListener("click", ({target: el}) => {
+            let backBtn = el.closest('.back-btn');
+            let smallImg = el.closest('.phone-thumb-img');
+            if(backBtn) {
+                this._onBackToCatalog();
             }
-            this._onBackToCatalog();
+            if(smallImg) {
+                this._changeImg(event, smallImg);
+            }
         });
     }
     show(phone) {
@@ -19,39 +22,31 @@ export class PhonesDetailsComponent extends BaseComponent {
         super.show();
     }
 
+    _changeImg(event, el) {
+        let imageUrl = el.getAttribute('src');
+        let bigImage = this._element.querySelector('.phone');
+        bigImage.setAttribute('src', imageUrl);
+    }
+
     _render() {
         this._element.innerHTML = `
-        <img class="phone" src="img/phones/motorola-xoom-with-wi-fi.0.jpg">
+        <img class="phone" src="${this._phone.images[0]}">
 
         <button class="back-btn">Back</button>
         <button>Add to basket</button>
     
     
-        <h1>Motorola XOOM™ with Wi-Fi</h1>
+        <h1>${this._phone.name}</h1>
     
-        <p>Motorola XOOM with Wi-Fi has a super-powerful dual-core processor and Android™ 3.0 (Honeycomb) — the Android platform designed specifically for tablets. With its 10.1-inch HD widescreen display, you’ll enjoy HD video in a thin, light, powerful and upgradeable tablet.</p>
+        <p>${this._phone.description}</p>
     
         <ul class="phone-thumbs">
-          <li>
-            <img src="img/phones/motorola-xoom-with-wi-fi.0.jpg">
-          </li>
-          <li>
-            <img src="img/phones/motorola-xoom-with-wi-fi.1.jpg">
-          </li>
-          <li>
-            <img src="img/phones/motorola-xoom-with-wi-fi.2.jpg">
-          </li>
-          <li>
-            <img src="img/phones/motorola-xoom-with-wi-fi.3.jpg">
-          </li>
-          <li>
-            <img src="img/phones/motorola-xoom-with-wi-fi.4.jpg">
-          </li>
-          <li>
-            <img src="img/phones/motorola-xoom-with-wi-fi.5.jpg">
-          </li>
+          ${this._phone.images.map((imagePhone) => `
+            <li>
+              <img class="phone-thumb-img" src="${imagePhone}">
+            </li>
+          `).join('')}
         </ul>
-        
         `
     }
 
