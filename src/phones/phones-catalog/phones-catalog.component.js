@@ -8,7 +8,7 @@ export class PhonesCatalogComponent extends BaseComponent{
         this._onPhoneSelected = onPhoneSelected;
         this._render();
         this._element.addEventListener("click", (event) => {
-            let el = event.target.closest('.thumb');
+            let el = event.target.closest('.show-details');
             if(!el) {
                 return;
             }
@@ -22,7 +22,7 @@ export class PhonesCatalogComponent extends BaseComponent{
         <ul class="phones">
           ${this._phones.map((phone) => `
             <li class="thumbnail">
-                <a href="#!/phones/${phone.id}" class="thumb" data-phone-id="${phone.id}">
+                <a href="#!/phones/${phone.id}" class="thumb show-details" data-phone-id="${phone.id}">
                   <img alt="${phone.name}" src="${phone.imageUrl}">
                 </a>
                 
