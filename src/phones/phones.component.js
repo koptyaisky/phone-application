@@ -25,6 +25,10 @@ export class PhonesComponent extends BaseComponent{
         //draw details
         this._details = new PhonesDetailsComponent({
             element: this._element.querySelector('.phones-details'),
+            onBackToCatalog: () => {
+                this._details.hide();
+                this._catalog.show();
+            }
         })
     }
 
