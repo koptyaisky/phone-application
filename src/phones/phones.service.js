@@ -156,7 +156,7 @@ const mockedPhones = [
 
 export const PhonesServise = new class {
     constructor() {
-        console.log('init PhonesServire');
+        console.log('init PhonesServise');
     }
 
     getAll() {
