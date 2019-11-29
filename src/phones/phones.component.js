@@ -2,15 +2,19 @@ import {PhonesCatalogComponent} from "./phones-catalog/phones-catalog.component.
 import {PhonesServise} from "./phones.service.js";
 import {PhonesDetailsComponent} from "./phone-details/phone-details.component.js";
 import {BaseComponent} from "../shared/components/base/base.component.js";
+import {CartComponent} from "./cart/cart.component.js";
 
 
 export class PhonesComponent extends BaseComponent{
     constructor({element}) {
         super({element});
         this._render();
+        this._initCatalog();
+        this._initDetails();
+        this._initCart();
+    }
 
-
-        //draw catalog
+    _initCatalog() {
         this._catalog = new PhonesCatalogComponent({
             element: this._element.querySelector('.phones-catalog'),
             phones: PhonesServise.getAll(),
@@ -19,16 +23,28 @@ export class PhonesComponent extends BaseComponent{
                 this._catalog.hide();
                 this._details.show(phone);
             },
+            onAdd: (phoneId) => {
+                this._cart.add(phoneId);
+            }
         });
+    }
 
-
-        //draw details
+    _initDetails() {
         this._details = new PhonesDetailsComponent({
             element: this._element.querySelector('.phones-details'),
             onBackToCatalog: () => {
                 this._details.hide();
                 this._catalog.show();
+            },
+            onAdd: (phoneId) => {
+                this._cart.add(phoneId);
             }
+        })
+    }
+
+    _initCart() {
+        this._cart = new CartComponent({
+            element: this._element.querySelector('.cart'),
         })
     }
 
@@ -53,14 +69,7 @@ export class PhonesComponent extends BaseComponent{
               </p>
             </section>
         
-            <section>
-              <p>Shopping Cart</p>
-              <ul>
-                <li>Phone 1</li>
-                <li>Phone 2</li>
-                <li>Phone 3</li>
-              </ul>
-            </section>
+            <section class="cart"></section>
           </div>
         
           <!--Main content-->
