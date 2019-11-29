@@ -2,19 +2,21 @@ import {BaseComponent} from "../../shared/components/base/base.component.js";
 
 
 export class PhonesDetailsComponent extends BaseComponent {
-    constructor({element, onBackToCatalog}) {
+    constructor({element, onBackToCatalog, onAdd}) {
         super({element});
         this._onBackToCatalog = onBackToCatalog;
-        this._element.addEventListener("click", ({target: el}) => {
-            let backBtn = el.closest('.back-btn');
-            let smallImg = el.closest('.phone-thumb-img');
-            if(backBtn) {
+        this._onAdd = onAdd;
+
+        this.
+            on('click', '.back-btn', (e) => {
                 this._onBackToCatalog();
-            }
-            if(smallImg) {
-                this._changeImg(event, smallImg);
-            }
-        });
+            })
+            .on('click', '.phone-thumb-img', (e) => {
+                this._changeImg(e.delegatedTarget);
+            })
+            .on('click', '.add', (e) => {
+                this._onAdd(this._phone.id);
+            });
     }
     show(phone) {
         this._phone = phone;
@@ -22,10 +24,10 @@ export class PhonesDetailsComponent extends BaseComponent {
         super.show();
     }
 
-    _changeImg(event, el) {
-        let imageUrl = el.getAttribute('src');
+    _changeImg(el) {
+        let imageUrl = el.src;
         let bigImage = this._element.querySelector('.phone');
-        bigImage.setAttribute('src', imageUrl);
+        bigImage.src = imageUrl;
     }
 
     _render() {
@@ -33,7 +35,7 @@ export class PhonesDetailsComponent extends BaseComponent {
         <img class="phone" src="${this._phone.images[0]}">
 
         <button class="back-btn">Back</button>
-        <button>Add to basket</button>
+        <button class="add">Add to basket</button>
     
     
         <h1>${this._phone.name}</h1>

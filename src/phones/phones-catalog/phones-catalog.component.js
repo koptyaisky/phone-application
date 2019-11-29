@@ -2,19 +2,22 @@ import {BaseComponent} from "../../shared/components/base/base.component.js";
 
 
 export class PhonesCatalogComponent extends BaseComponent{
-    constructor({element, phones, onPhoneSelected}) {
+    constructor({element, phones, onPhoneSelected, onAdd}) {
         super({element});
         this._phones = phones;
         this._onPhoneSelected = onPhoneSelected;
+        this._onAdd = onAdd;
         this._render();
-        this._element.addEventListener("click", (event) => {
-            let el = event.target.closest('.show-details');
-            if(!el) {
-                return;
-            }
-            const {phoneId} = el.dataset;
-            this._onPhoneSelected(phoneId);
-        });
+
+        this
+            .on('click', '.show-details', (e) => {
+                const {phoneId} = e.delegatedTarget.dataset;
+                this._onPhoneSelected(phoneId);
+            })
+            .on('click', '.add', (e) => {
+                const {phoneId} = e.delegatedTarget.dataset;
+                this._onAdd(phoneId);
+            });
     }
 
     _render() {
@@ -27,7 +30,7 @@ export class PhonesCatalogComponent extends BaseComponent{
                 </a>
                 
                 <div class="phones__btn-buy-wrapper">
-                  <a class="btn btn-success">Add</a>
+                  <a class="btn btn-success add" data-phone-id="${phone.id}">Add</a>
                 </div>
                 
                 <a href="#!/phones/${phone.id}" class="show-details">${phone.name}</a>
