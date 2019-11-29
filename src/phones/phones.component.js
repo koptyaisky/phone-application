@@ -17,35 +17,37 @@ export class PhonesComponent extends BaseComponent{
     _initCatalog() {
         this._catalog = new PhonesCatalogComponent({
             element: this._element.querySelector('.phones-catalog'),
-            phones: PhonesServise.getAll(),
-            onPhoneSelected: (phoneId) => {
+            phones: PhonesServise.getAll()
+        });
+        this._catalog
+            .subscribe('phone-selected', ({detail: phoneId}) => {
                 const phone = PhonesServise.getOneById(phoneId);
                 this._catalog.hide();
                 this._details.show(phone);
-            },
-            onAdd: (phoneId) => {
+            })
+            .subscribe('add-to-cart', ({detail: phoneId}) => {
                 this._cart.add(phoneId);
-            }
-        });
+            });
     }
 
     _initDetails() {
         this._details = new PhonesDetailsComponent({
-            element: this._element.querySelector('.phones-details'),
-            onBackToCatalog: () => {
+            element: this._element.querySelector('.phones-details')
+        });
+        this._details
+            .subscribe('back', () => {
                 this._details.hide();
                 this._catalog.show();
-            },
-            onAdd: (phoneId) => {
+            })
+            .subscribe('add-to-cart', ({detail: phoneId}) => {
                 this._cart.add(phoneId);
-            }
-        })
+            });
     }
 
     _initCart() {
         this._cart = new CartComponent({
             element: this._element.querySelector('.cart'),
-        })
+        });
     }
 
     _render() {

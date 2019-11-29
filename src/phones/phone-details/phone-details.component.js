@@ -2,20 +2,18 @@ import {BaseComponent} from "../../shared/components/base/base.component.js";
 
 
 export class PhonesDetailsComponent extends BaseComponent {
-    constructor({element, onBackToCatalog, onAdd}) {
+    constructor({element}) {
         super({element});
-        this._onBackToCatalog = onBackToCatalog;
-        this._onAdd = onAdd;
 
-        this.
-            on('click', '.back-btn', (e) => {
-                this._onBackToCatalog();
-            })
+        this
             .on('click', '.phone-thumb-img', (e) => {
                 this._changeImg(e.delegatedTarget);
             })
+            .on('click', '.back-btn', (e) => {
+                this.emit('back');
+            })
             .on('click', '.add', (e) => {
-                this._onAdd(this._phone.id);
+                this.emit('add-to-cart', this._phone.id);
             });
     }
     show(phone) {
