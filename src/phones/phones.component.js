@@ -3,6 +3,7 @@ import {PhonesServise} from "./phones.service.js";
 import {PhonesDetailsComponent} from "./phone-details/phone-details.component.js";
 import {BaseComponent} from "../shared/components/base/base.component.js";
 import {CartComponent} from "./cart/cart.component.js";
+import {FilterComponent} from "./filter/filter.component.js";
 
 
 export class PhonesComponent extends BaseComponent{
@@ -12,13 +13,14 @@ export class PhonesComponent extends BaseComponent{
         this._initCatalog();
         this._initDetails();
         this._initCart();
+        this._initFilter();
     }
 
     _initCatalog() {
         this._catalog = new PhonesCatalogComponent({
             element: this._element.querySelector('.phones-catalog'),
-            phones: PhonesServise.getAll()
         });
+        this._showFilteredPhones();
         this._catalog
             .subscribe('phone-selected', ({detail: phoneId}) => {
                 const phone = PhonesServise.getOneById(phoneId);
@@ -37,7 +39,7 @@ export class PhonesComponent extends BaseComponent{
         this._details
             .subscribe('back', () => {
                 this._details.hide();
-                this._catalog.show();
+                this._showFilteredPhones();
             })
             .subscribe('add-to-cart', ({detail: phoneId}) => {
                 this._cart.add(phoneId);
@@ -50,36 +52,41 @@ export class PhonesComponent extends BaseComponent{
         });
     }
 
+    _initFilter() {
+        this._filter = new FilterComponent({
+            element: this._element.querySelector('.filter')
+        });
+        this._filter
+            .subscribe('search', ({detail: searchText}) => {
+                this._searchText = searchText;
+                this._showFilteredPhones();
+            })
+            .subscribe('sort', ({detail: sortBy}) => {
+                this._sortBy = sortBy;
+                this._showFilteredPhones();
+            });
+    }
+
+    _showFilteredPhones() {
+        const phones = PhonesServise.getAll({searchText: this._searchText, sortBy: this._sortBy});
+        this._catalog.show(phones);
+    }
+
     _render() {
         this._element.innerHTML = `
-        <div class="row">
-        
-          <!--Sidebar-->
-          <div class="col-md-2">
-            <section>
-              <p>
-                Search:
-                <input>
-              </p>
-        
-              <p>
-                Sort by:
-                <select>
-                  <option value="name">Alphabetical</option>
-                  <option value="age">Newest</option>
-                </select>
-              </p>
-            </section>
-        
-            <section class="cart"></section>
-          </div>
-        
-          <!--Main content-->
-          <div class="col-md-10">
-            <div class="phones-catalog"></div>
-            <div class="phones-details"></div>
-          </div>
-        </div>
+            <div class="row">
+                <!--Sidebar-->
+                <div class="col-md-2">
+                    <section class="filter"></section>
+                    <section class="cart"></section>
+                </div>
+                
+                <!--Main content-->
+                <div class="col-md-10">
+                    <div class="phones-catalog"></div>
+                    <div class="phones-details"></div>
+                </div>
+            </div>
         `
     }
 }

@@ -224,11 +224,42 @@ export const PhonesServise = new class {
         console.log('init PhonesServise');
     }
 
-    getAll() {
-        return mockedPhones;
+    getAll({searchText, sortBy} = {}) {
+        const searchPhones = this._search(mockedPhones, searchText);
+        return this._sort(searchPhones, sortBy);
+        //return searchPhones;
     }
 
     getOneById(id) {
         return mockedPhone;
     }
+
+    _search(phones, text) {
+        if(!text) {
+            return phones;
+        }
+
+        return phones.filter((phone) => {
+           return phone.name.toLowerCase().includes(text.toLowerCase());
+        });
+    }
+
+    _sort(phones, sortBy) {
+        if(!sortBy) {
+            return phones
+        }
+
+        phones.sort((phone1, phone2) => {
+            if(phone1[sortBy] > phone2[sortBy]) {
+                return 1;
+            }
+            if(phone1[sortBy] < phone2[sortBy]) {
+                return -1;
+            }
+            return 0;
+        });
+
+        return phones;
+    }
+
 };
