@@ -26,4 +26,14 @@ export class BaseComponent {
         return this;
     }
 
+    subscribe(eventName, cb) {
+        this._element.addEventListener(eventName, cb);
+        return this;
+    }
+
+    emit(eventName, details) {
+        const customEvent = new CustomEvent(eventName, {detail: details});
+        this._element.dispatchEvent(customEvent);
+    }
+
 }

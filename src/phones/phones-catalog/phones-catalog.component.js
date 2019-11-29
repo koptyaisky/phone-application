@@ -2,21 +2,19 @@ import {BaseComponent} from "../../shared/components/base/base.component.js";
 
 
 export class PhonesCatalogComponent extends BaseComponent{
-    constructor({element, phones, onPhoneSelected, onAdd}) {
+    constructor({element, phones}) {
         super({element});
         this._phones = phones;
-        this._onPhoneSelected = onPhoneSelected;
-        this._onAdd = onAdd;
         this._render();
 
         this
             .on('click', '.show-details', (e) => {
                 const {phoneId} = e.delegatedTarget.dataset;
-                this._onPhoneSelected(phoneId);
+                this.emit('phone-selected', phoneId);
             })
             .on('click', '.add', (e) => {
                 const {phoneId} = e.delegatedTarget.dataset;
-                this._onAdd(phoneId);
+                this.emit('add-to-cart', phoneId);
             });
     }
 
