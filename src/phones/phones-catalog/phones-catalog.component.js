@@ -36,7 +36,7 @@ export class PhonesCatalogComponent extends BaseComponent{
                   <a class="btn btn-success add" data-phone-id="${phone.id}">Add</a>
                 </div>
                 
-                <a href="#!/phones/${phone.id}" class="show-details">${phone.name}</a>
+                <a href="#!/phones/${phone.id}" class="show-details" data-phone-id="${phone.id}">${phone.name}</a>
                 <p>${phone.snippet}</p>
             </li>
           `).join('')}
