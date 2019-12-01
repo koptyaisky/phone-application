@@ -22,10 +22,14 @@ export class PhonesComponent extends BaseComponent{
         });
         this._showFilteredPhones();
         this._catalog
-            .subscribe('phone-selected', ({detail: phoneId}) => {
-                const phone = PhonesServise.getOneById(phoneId);
-                this._catalog.hide();
-                this._details.show(phone);
+            .subscribe('phone-selected', async ({detail: phoneId}) => {
+                try {
+                    const phone = await PhonesServise.getOneById(phoneId);
+                    this._catalog.hide();
+                    this._details.show(phone);
+                } catch(err) {
+                    console.log(err);
+                }
             })
             .subscribe('add-to-cart', ({detail: phoneId}) => {
                 this._cart.add(phoneId);
@@ -67,9 +71,13 @@ export class PhonesComponent extends BaseComponent{
             });
     }
 
-    _showFilteredPhones() {
-        const phones = PhonesServise.getAll({searchText: this._searchText, sortBy: this._sortBy});
-        this._catalog.show(phones);
+    async _showFilteredPhones() {
+        try {
+            const phones = await PhonesServise.getAll({searchText: this._searchText, sortBy: this._sortBy});
+            this._catalog.show(phones);
+        } catch (err) {
+            console.log(err);
+        }
     }
 
     _render() {
