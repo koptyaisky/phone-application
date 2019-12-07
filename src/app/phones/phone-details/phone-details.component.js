@@ -1,4 +1,6 @@
-import {BaseComponent} from "../../shared/components/base/base.component.js";
+import {BaseComponent} from "../../shared/components/base/base.component";
+import template from './phone-details.component.hbs';
+import './phone-details.component.css';
 
 
 export class PhonesDetailsComponent extends BaseComponent {
@@ -29,25 +31,7 @@ export class PhonesDetailsComponent extends BaseComponent {
     }
 
     _render() {
-        this._element.innerHTML = `
-        <img class="phone" src="${this._phone.images[0]}">
-
-        <button class="back-btn">Back</button>
-        <button class="add">Add to basket</button>
-    
-    
-        <h1>${this._phone.name}</h1>
-    
-        <p>${this._phone.description}</p>
-    
-        <ul class="phone-thumbs">
-          ${this._phone.images.map((imagePhone) => `
-            <li>
-              <img class="phone-thumb-img" src="${imagePhone}">
-            </li>
-          `).join('')}
-        </ul>
-        `
+        this._element.innerHTML = template({phone: this._phone});
     }
 
 }

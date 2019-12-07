@@ -1,0 +1,9 @@
+<p>Shopping Cart</p>
+<ul>
+  ${Object.entries(this._phones).map(([phoneId, count]) => {
+  return `
+  <li>${phoneId} - (${count})</li>
+  <button class="remove" data-phone-id="${phoneId}">X</button>
+  `
+  }).join('')}
+</ul>
